@@ -2,7 +2,6 @@ const createTorrent = require("create-torrent");
 const debug = require("debug")("instant.io");
 const dragDrop = require("drag-drop");
 const escapeHtml = require("escape-html");
-const get = require("simple-get");
 const formatDistance = require("date-fns/formatDistance");
 const path = require("path");
 const prettierBytes = require("prettier-bytes");
@@ -25,22 +24,18 @@ globalThis.WEBTORRENT_ANNOUNCE = createTorrent.announceList.map(function (arr)
 
 const getClient = thunky(function (cb)
 {
-	getRtcConfig(function (err, rtcConfig)
-	{
-		if (err) util.error(err);
-		const client = new WebTorrent({
-			tracker: {
-				rtcConfig: {
-					...SimplePeer.config,
-					...rtcConfig
-				}
+	const client = new WebTorrent({
+		tracker: {
+			rtcConfig: {
+				...SimplePeer.config,
+				...undefined
 			}
-		});
-		window.client = client; // for easier debugging
-		client.on("warning", util.warning);
-		client.on("error", util.error);
-		cb(null, client);
+		}
 	});
+	window.client = client; // for easier debugging
+	client.on("warning", util.warning);
+	client.on("error", util.error);
+	cb(null, client);
 });
 
 init();
@@ -99,34 +94,6 @@ function init()
 	{
 		navigator.registerProtocolHandler("magnet", window.location.origin + "#%s", "Instant.io");
 	}
-}
-
-function getRtcConfig(cb)
-{
-	// WARNING: This is *NOT* a public endpoint. Do not depend on it in your app.
-	get.concat({
-		url: "/__rtcConfig__",
-		timeout: 5000
-	}, function (err, res, data)
-	{
-		if (err || res.statusCode !== 200)
-		{
-			cb(new Error("Could not get WebRTC config from server. Using default (without TURN)."));
-		}
-		else
-		{
-			try
-			{
-				data = JSON.parse(data);
-			}
-			catch (err)
-			{
-				return cb(new Error("Got invalid WebRTC config from server: " + data));
-			}
-			debug("got rtc config: %o", data.rtcConfig);
-			cb(null, data.rtcConfig);
-		}
-	});
 }
 
 function onFiles(files)

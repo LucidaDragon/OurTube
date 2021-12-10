@@ -1,7 +1,6 @@
 const compress = require("compression");
 const express = require("express");
 const http = require("http");
-const pug = require("pug");
 const path = require("path");
 
 const config = require("../config");
@@ -17,31 +16,14 @@ app.enable("trust proxy");
 // Disable "powered by express" header
 app.set("x-powered-by", false);
 
-// Use pug for templates
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
-app.engine("pug", pug.renderFile);
-
 // Pretty print JSON
-app.set("json spaces", 2);
+app.set("json spaces", 4);
 
 // Use GZIP
 app.use(compress());
 
 app.use(function (req, res, next)
 {
-	// Force SSL
-	if (config.isProd && req.protocol !== "https")
-	{
-		return res.redirect("https://" + (req.hostname || "instant.io") + req.url);
-	}
-
-	// Redirect www to non-www
-	if (config.isProd && req.hostname === "www.instant.io")
-	{
-		return res.redirect("https://instant.io" + req.url);
-	}
-
 	// Use HTTP Strict Transport Security
 	// Lasts 1 year, incl. subdomains, allow browser preload list
 	if (config.isProd)
@@ -79,33 +61,12 @@ app.use(function (req, res, next)
 
 app.use(express.static(path.join(__dirname, "../static")));
 
-app.get("/", function (req, res)
+app.get("/", function ()
 {
-	res.render("index", {
-		title: "OurTube"
-	});
-});
-
-app.get("*", function (req, res)
-{
-	res.status(404).render("error", {
-		title: "404 Page Not Found - Instant.io",
-		message: "404 Not Found"
-	});
-});
-
-// error handling middleware
-app.use(function (err, req, res)
-{
-	console.error(err.stack);
-	const code = typeof err.code === "number" ? err.code : 500;
-	res.status(code).render("error", {
-		title: "500 Internal Server Error - Instant.io",
-		message: err.message || err
-	});
+	express.static(path.join(__dirname, "../static/index.html"));
 });
 
 server.listen(PORT, "127.0.0.1", function ()
 {
-	console.log("listening on port %s", server.address().port);
+	console.log("Listening on port %s", server.address().port);
 });

@@ -48,12 +48,11 @@
 		"build": "npm run build-css && npm run build-js",
 		"build-css": "stylus css/main.styl -o static/ -c",
 		"build-js": "browserify client > static/bundle.js",
-		"deploy": "./tools/trigger-deploy.sh",
 		"size": "npm run size-js && npm run size-css",
 		"size-css": "npm run build-css && cat static/main.css | gzip | wc -c",
 		"size-js": "npm run build-js && cat static/bundle.js | gzip | wc -c",
 		"start": "node server",
-		"update-authors": "./tools/update-authors.sh",
+		"update-authors": "git log --reverse --format=\"%aN <%aE>\" | python tools/update-authors.py",
 		"watch": "npm run watch-css & npm run watch-js & DEBUG=instant* nodemon server",
 		"watch-css": "stylus css/main.styl -o static/ -w",
 		"watch-js": "watchify client -o static/bundle.js -dv"

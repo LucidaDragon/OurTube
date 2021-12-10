@@ -27,8 +27,7 @@ const getClient = thunky(function (cb)
 	const client = new WebTorrent({
 		tracker: {
 			rtcConfig: {
-				...SimplePeer.config,
-				...undefined
+				...SimplePeer.config
 			}
 		}
 	});

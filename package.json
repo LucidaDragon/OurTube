@@ -1,92 +1,68 @@
 {
-  "name": "instant.io",
-  "description": "Secure, anonymous, streaming file transfer",
-  "version": "1.0.0",
-  "author": {
-    "name": "WebTorrent LLC",
-    "email": "feross@webtorrent.io",
-    "url": "https://webtorrent.io"
-  },
-  "bugs": {
-    "url": "https://github.com/webtorrent/instant.io/issues"
-  },
-  "dependencies": {
-    "compression": "1.7.4",
-    "cors": "2.8.5",
-    "create-torrent": "5.0.1",
-    "date-fns": "2.27.0",
-    "debug": "4.3.2",
-    "drag-drop": "7.2.0",
-    "escape-html": "1.0.3",
-    "express": "4.17.1",
-    "jszip": "3.7.1",
-    "prettier-bytes": "1.0.4",
-    "pug": "3.0.2",
-    "rollbar": "2.24.0",
-    "simple-get": "4.0.0",
-    "simple-peer": "9.11.0",
-    "throttleit": "1.0.0",
-    "thunky": "1.1.0",
-    "upload-element": "1.0.1",
-    "webtorrent": "1.5.8"
-  },
-  "devDependencies": {
-    "browserify": "17.0.0",
-    "husky": "7.0.4",
-    "nodemon": "2.0.15",
-    "standard": "*",
-    "stylus": "0.55.0",
-    "watchify": "4.0.0"
-  },
-  "homepage": "https://instant.io",
-  "keywords": [
-    "data channel",
-    "file transfer",
-    "p2p",
-    "webrtc"
-  ],
-  "license": "MIT",
-  "main": "index.js",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/webtorrent/instant.io.git"
-  },
-  "scripts": {
-    "build": "npm run build-css && npm run build-js",
-    "build-css": "stylus css/main.styl -o static/ -c",
-    "build-js": "browserify client > static/bundle.js",
-    "deploy": "./tools/trigger-deploy.sh",
-    "prepare": "husky install",
-    "secret-download": "rsync -a -O -v --delete feross@webtorrent:\"/home/feross/www/instant.io/secret/\" secret/",
-    "secret-upload": "rsync -a -O -v --delete secret/ feross@webtorrent:/home/feross/www/instant.io/secret/",
-    "size": "npm run size-js && npm run size-css",
-    "size-css": "npm run build-css && cat static/main.css | gzip | wc -c",
-    "size-js": "npm run build-js && cat static/bundle.js | gzip | wc -c",
-    "start": "node server",
-    "test": "standard",
-    "update-authors": "./tools/update-authors.sh",
-    "watch": "npm run watch-css & npm run watch-js & DEBUG=instant* nodemon server",
-    "watch-css": "stylus css/main.styl -o static/ -w",
-    "watch-js": "watchify client -o static/bundle.js -dv"
-  },
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/feross"
-    },
-    {
-      "type": "patreon",
-      "url": "https://www.patreon.com/feross"
-    },
-    {
-      "type": "consulting",
-      "url": "https://feross.org/support"
-    }
-  ],
-  "renovate": {
-    "extends": [
-      "github>webtorrent/renovate-config"
-    ]
-  }
+	"name": "ourtube",
+	"description": "A decentralized video hosting platform.",
+	"version": "1.0.0",
+	"author": {
+		"name": "LucidaDragon"
+	},
+	"dependencies": {
+		"compression": "1.7.4",
+		"cors": "2.8.5",
+		"create-torrent": "5.0.1",
+		"date-fns": "2.27.0",
+		"debug": "4.3.2",
+		"drag-drop": "7.2.0",
+		"escape-html": "1.0.3",
+		"express": "4.17.1",
+		"jszip": "3.7.1",
+		"prettier-bytes": "1.0.4",
+		"pug": "3.0.2",
+		"simple-get": "4.0.0",
+		"simple-peer": "9.11.0",
+		"throttleit": "1.0.0",
+		"thunky": "1.1.0",
+		"upload-element": "1.0.1",
+		"webtorrent": "1.5.8"
+	},
+	"devDependencies": {
+		"browserify": "17.0.0",
+		"eslint": "^8.4.1",
+		"nodemon": "2.0.15",
+		"stylus": "0.55.0",
+		"watchify": "4.0.0"
+	},
+	"keywords": [
+		"video",
+		"hosting",
+		"data channel",
+		"file transfer",
+		"p2p",
+		"webrtc"
+	],
+	"license": "MIT",
+	"main": "index.js",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/LucidaDragon/OurTube.git"
+	},
+	"scripts": {
+		"build": "npm run build-css && npm run build-js",
+		"build-css": "stylus css/main.styl -o static/ -c",
+		"build-js": "browserify client > static/bundle.js",
+		"deploy": "./tools/trigger-deploy.sh",
+		"size": "npm run size-js && npm run size-css",
+		"size-css": "npm run build-css && cat static/main.css | gzip | wc -c",
+		"size-js": "npm run build-js && cat static/bundle.js | gzip | wc -c",
+		"start": "node server",
+		"update-authors": "./tools/update-authors.sh",
+		"watch": "npm run watch-css & npm run watch-js & DEBUG=instant* nodemon server",
+		"watch-css": "stylus css/main.styl -o static/ -w",
+		"watch-js": "watchify client -o static/bundle.js -dv"
+	},
+	"renovate": {
+		"extends": [
+			"github>webtorrent/renovate-config"
+		]
+	}
 }

@@ -88,12 +88,6 @@ function init()
 		const hash = decodeURIComponent(window.location.hash.substring(1)).trim();
 		if (hash !== "") downloadTorrent(hash);
 	}
-
-	// Register a protocol handler for "magnet:" (will prompt the user)
-	if ("registerProtocolHandler" in navigator)
-	{
-		navigator.registerProtocolHandler("magnet", window.location.origin + "#%s", "Instant.io");
-	}
 }
 
 function onFiles(files)

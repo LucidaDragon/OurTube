@@ -1,5 +1,4 @@
 const createTorrent = require("create-torrent");
-const debug = require("debug")("instant.io");
 const dragDrop = require("drag-drop");
 const escapeHtml = require("escape-html");
 const formatDistance = require("date-fns/formatDistance");
@@ -91,12 +90,6 @@ function init()
 
 function onFiles(files)
 {
-	debug("got files:");
-	files.forEach(function (file)
-	{
-		debug(" - %s (%s bytes)", file.name, file.size);
-	});
-
 	// .torrent file = start downloading the torrent
 	files.filter(isTorrentFile).forEach(downloadTorrentFile);
 

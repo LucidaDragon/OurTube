@@ -9,7 +9,6 @@
 		"compression": "1.7.4",
 		"create-torrent": "5.0.1",
 		"date-fns": "2.27.0",
-		"debug": "4.3.2",
 		"drag-drop": "7.2.0",
 		"escape-html": "1.0.3",
 		"express": "4.17.1",

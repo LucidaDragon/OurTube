@@ -11,16 +11,21 @@
 
 <body>
     <main>
-        <h1 id="logHeading" style="display: none">Log</h1>
-        <div class="speed"></div>
-        <div class="log"></div>
+		<section>
+			<div class="hostedContent"></div>
+		</section>
+		<section>
+			<h2 id="logHeading" style="display: none">Log</h1>
+			<div class="speed"></div>
+			<div class="log"></div>
+		</section>
         <section>
-            <h1>Start sharing</h1>
+            <h2>Start sharing</h1>
             <p>Drag-and-drop files to begin seeding. Or choose a file:
                 <input type="file" name="upload" multiple></p>
         </section>
         <section>
-            <h1>Start downloading</h1>
+            <h2>Start downloading</h1>
             <form><label for="torrentId">Download from a magnet link or info hash</label><input name="torrentId" placeholder="magnet:" required><button type="submit">Download</button></form>
         </section>
         <footer>

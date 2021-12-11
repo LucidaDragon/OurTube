@@ -1,6 +1,7 @@
 const logElem = exports.logElem = document.querySelector(".log");
 const logHeading = document.querySelector("#logHeading");
 const speed = document.querySelector(".speed");
+exports.hostedContent = document.querySelector(".hostedContent");
 
 exports.log = function log(item, unsafe)
 {

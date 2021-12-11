@@ -19,10 +19,7 @@
 	},
 	"devDependencies": {
 		"browserify": "17.0.0",
-		"eslint": "^8.4.1",
-		"nodemon": "2.0.15",
-		"stylus": "0.55.0",
-		"watchify": "4.0.0"
+		"eslint": "^8.4.1"
 	},
 	"keywords": [
 		"video",
@@ -40,17 +37,10 @@
 		"url": "git://github.com/LucidaDragon/OurTube.git"
 	},
 	"scripts": {
-		"build": "npm run build-css && npm run build-js",
-		"build-css": "stylus css/main.styl -o static/ -c",
-		"build-js": "browserify client > static/bundle.js",
-		"size": "npm run size-js && npm run size-css",
-		"size-css": "npm run build-css && cat static/main.css | gzip | wc -c",
-		"size-js": "npm run build-js && cat static/bundle.js | gzip | wc -c",
+		"build": "browserify client > static/bundle.js",
+		"size": "npm run build-js && cat static/bundle.js | gzip | wc -c",
 		"start": "node server",
-		"update-authors": "git log --reverse --format=\"%aN <%aE>\" | python tools/update-authors.py",
-		"watch": "npm run watch-css & npm run watch-js & DEBUG=instant* nodemon server",
-		"watch-css": "stylus css/main.styl -o static/ -w",
-		"watch-js": "watchify client -o static/bundle.js -dv"
+		"update-authors": "git log --reverse --format=\"%aN <%aE>\" | python tools/update-authors.py"
 	},
 	"renovate": {
 		"extends": [

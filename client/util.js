@@ -52,3 +52,18 @@ exports.error = function error(err)
 	p.style.fontWeight = "bold";
 	return p;
 };
+
+exports.escapeHtml = function escapeHtml(value)
+{
+	return value.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&#39;").replace("<", "&lt;").replace(">", "&gt;");
+};
+
+exports.getMetricBytes = function getMetricBytes(value)
+{
+	const units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+	let index = 0;
+
+	for (; index < (units.length - 1) && value > 1000; index++, value /= 1000);
+
+	return `${value.toFixed(1)} ${units[index]}`;
+};

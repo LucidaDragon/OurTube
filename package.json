@@ -10,13 +10,10 @@
 		"create-torrent": "5.0.1",
 		"date-fns": "2.27.0",
 		"drag-drop": "7.2.0",
-		"escape-html": "1.0.3",
 		"express": "4.17.1",
 		"jszip": "3.7.1",
-		"prettier-bytes": "1.0.4",
 		"simple-get": "4.0.0",
 		"simple-peer": "9.11.0",
-		"throttleit": "1.0.0",
 		"upload-element": "1.0.1",
 		"webtorrent": "1.5.8"
 	},

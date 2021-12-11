@@ -1,10 +1,7 @@
 const createTorrent = require("create-torrent");
 const dragDrop = require("drag-drop");
-const escapeHtml = require("escape-html");
 const formatDistance = require("date-fns/formatDistance");
 const path = require("path");
-const prettierBytes = require("prettier-bytes");
-const throttle = require("throttleit");
 const uploadElement = require("upload-element");
 const WebTorrent = require("webtorrent");
 const JSZip = require("jszip");
@@ -107,7 +104,7 @@ function downloadTorrent(torrentId)
 
 function downloadTorrentFile(file)
 {
-	util.unsafeLog("Downloading torrent from <strong>" + escapeHtml(file.name) + "</strong>");
+	util.unsafeLog("Downloading torrent from <strong>" + util.escapeHtml(file.name) + "</strong>");
 	client.add(file, onTorrent);
 }
 
@@ -132,14 +129,14 @@ function onTorrent(torrent)
 
 	torrent.files.forEach(function (file)
 	{
-		util.unsafeLog("&nbsp;&nbsp;- " + escapeHtml(file.name) + " (" + escapeHtml(prettierBytes(file.length)) + ")");
+		util.unsafeLog("&nbsp;&nbsp;- " + util.escapeHtml(file.name) + " (" + util.escapeHtml(util.getMetricBytes(file.length)) + ")");
 	});
 
 	util.log("Torrent info hash: " + torrent.infoHash);
 	util.unsafeLog(
-		"<a href=\"/#" + escapeHtml(torrent.infoHash) + "\" onclick=\"prompt('Share this link with anyone you want to download this torrent:', this.href);return false;\">[Share link]</a> " +
-		"<a href=\"" + escapeHtml(torrent.magnetURI) + "\" target=\"_blank\">[Magnet URI]</a> " +
-		"<a href=\"" + escapeHtml(torrent.torrentFileBlobURL) + "\" target=\"_blank\" download=\"" + escapeHtml(torrentFileName) + "\">[Download .torrent]</a>"
+		"<a href=\"/#" + util.escapeHtml(torrent.infoHash) + "\" onclick=\"prompt('Share this link with anyone you want to download this torrent:', this.href);return false;\">[Share link]</a> " +
+		"<a href=\"" + util.escapeHtml(torrent.magnetURI) + "\" target=\"_blank\">[Magnet URI]</a> " +
+		"<a href=\"" + util.escapeHtml(torrent.torrentFileBlobURL) + "\" target=\"_blank\" download=\"" + util.escapeHtml(torrentFileName) + "\">[Download .torrent]</a>"
 	);
 
 	function updateSpeed()
@@ -162,14 +159,14 @@ function onTorrent(torrent)
 		util.updateSpeed(
 			"<b>Peers:</b> " + torrent.numPeers + " " +
 			"<b>Progress:</b> " + progress + "% " +
-			"<b>Download speed:</b> " + prettierBytes(client.downloadSpeed) + "/s " +
-			"<b>Upload speed:</b> " + prettierBytes(client.uploadSpeed) + "/s " +
+			"<b>Download speed:</b> " + util.getMetricBytes(client.downloadSpeed) + "/s " +
+			"<b>Upload speed:</b> " + util.getMetricBytes(client.uploadSpeed) + "/s " +
 			"<b>ETA:</b> " + remaining
 		);
 	}
 
-	torrent.on("download", throttle(updateSpeed, 250));
-	torrent.on("upload", throttle(updateSpeed, 250));
+	torrent.on("download", updateSpeed);
+	torrent.on("upload", updateSpeed);
 	setInterval(updateSpeed, 5000);
 	updateSpeed();
 

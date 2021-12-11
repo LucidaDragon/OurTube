@@ -244,6 +244,8 @@ function onTorrent(torrent)
 
 	torrent.files.forEach(function (file)
 	{
+		document.querySelector(".contentTitle").innerText = file.name;
+
 		// append file
 		file.appendTo(util.hostedContent, {
 			maxBlobLength: 2 * 1000 * 1000 * 1000 // 2 GB

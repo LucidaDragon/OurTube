@@ -171,6 +171,7 @@ function isNotTorrentFile(file)
 function downloadTorrent(torrentId)
 {
 	util.log("Downloading torrent from " + torrentId);
+	util.log("Establishing connection...");
 	client.add(torrentId, onTorrent);
 }
 
@@ -315,6 +316,16 @@ function onTorrent(torrent)
 	});
 	util.appendElemToLog(downloadZip);
 }
+
+window.addEventListener("load", function ()
+{
+	let query = new URLSearchParams(window.location.search);
+
+	if (query.has("watch"))
+	{
+		downloadTorrent(query.get("watch").trim());
+	}
+});
 },{"./util":1,"create-torrent":142,"date-fns/formatDistance":171,"drag-drop":197,"jszip":274,"path":351,"simple-peer":412,"upload-element":500,"webtorrent":507}],3:[function(require,module,exports){
 const ADDR_RE = /^\[?([^\]]+)]?:(\d+)$/ // ipv4/ipv6/hostname + port
 

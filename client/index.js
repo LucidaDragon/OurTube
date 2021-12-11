@@ -99,6 +99,7 @@ function isNotTorrentFile(file)
 function downloadTorrent(torrentId)
 {
 	util.log("Downloading torrent from " + torrentId);
+	util.log("Establishing connection...");
 	client.add(torrentId, onTorrent);
 }
 
@@ -243,3 +244,13 @@ function onTorrent(torrent)
 	});
 	util.appendElemToLog(downloadZip);
 }
+
+window.addEventListener("load", function ()
+{
+	let query = new URLSearchParams(window.location.search);
+
+	if (query.has("watch"))
+	{
+		downloadTorrent(query.get("watch").trim());
+	}
+});

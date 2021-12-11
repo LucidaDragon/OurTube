@@ -173,15 +173,57 @@ function onTorrent(torrent)
 
 	torrent.files.forEach(function (file)
 	{
-		document.querySelector(".contentTitle").innerText = file.name;
+		let profileIcon = document.querySelector(".profileIcon");
+		let profileName = document.querySelector(".profileName");
 
-		// append file
-		file.appendTo(util.hostedContent, {
-			maxBlobLength: 2 * 1000 * 1000 * 1000 // 2 GB
-		}, function (err)
+		if (profileIcon.childElementCount === 0)
 		{
-			if (err) return util.error(err);
-		});
+			let defaultIcon = document.createElement("img");
+			defaultIcon.src = "./profile.png";
+			defaultIcon.width = 48;
+			defaultIcon.height = 48;
+			defaultIcon.className = "profileIconImage";
+			profileIcon.appendChild(defaultIcon);
+		}
+
+		if (profileName.innerText.trim().length === 0)
+		{
+			profileName.innerText = "Anonymous";
+		}
+
+		if (isVideoFile(file.name))
+		{
+			document.querySelector(".contentTitle").innerText = file.name;
+
+			file.appendTo(document.querySelector(".hostedContent"), {
+				maxBlobLength: 2 * 1000 * 1000 * 1000, // 2 GB
+				autoplay: true
+			}, function (err)
+			{
+				if (err) return util.error(err);
+			});
+		}
+		else if (isProfileImage(file.name))
+		{
+			profileIcon.innerHTML = "";
+
+			file.appendTo(document.querySelector(".profileIcon"), {
+				maxBlobLength: 2 * 1000 * 1000 // 2 MB
+			}, function (err)
+			{
+				if (err) return util.error(err);
+			});
+		}
+		else if (isInfoFile(file.name))
+		{
+			file.getBuffer(function (err, buffer)
+			{
+				if (err) return util.error(err);
+
+				//TODO: Parse file and get parameters.
+				//document.querySelector(".profileName").innerText = buffer.toString("utf8");
+			});
+		}
 
 		// append download link
 		file.getBlobURL(function (err, url)
@@ -243,6 +285,21 @@ function onTorrent(torrent)
 		});
 	});
 	util.appendElemToLog(downloadZip);
+}
+
+function isVideoFile(name)
+{
+	return name.toLowerCase().endsWith(".mp4");
+}
+
+function isProfileImage(name)
+{
+	return name.toLowerCase() === "profile.png";
+}
+
+function isInfoFile(name)
+{
+	return name.toLowerCase() === "info.ini";
 }
 
 window.addEventListener("load", function ()

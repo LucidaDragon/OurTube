@@ -112,6 +112,31 @@ input[name=torrentId]
     word-break: break-word;
 }
 
+.profileInfo
+{
+	display: grid;
+	grid-template-columns: max-content max-content auto;
+}
+
+.profileIcon
+{
+	grid-row: 1;
+	grid-column: 1;
+	border-radius: 24px;
+}
+
+.profileIconImage
+{
+	margin: 0;
+}
+
+.profileName
+{
+	grid-row: 1;
+	grid-column: 2;
+	margin: 1em;
+}
+
 footer
 {
     margin: 30px 0;

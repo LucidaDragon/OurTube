@@ -5,7 +5,6 @@ const formatDistance = require("date-fns/formatDistance");
 const path = require("path");
 const prettierBytes = require("prettier-bytes");
 const throttle = require("throttleit");
-const thunky = require("thunky");
 const uploadElement = require("upload-element");
 const WebTorrent = require("webtorrent");
 const JSZip = require("jszip");
@@ -21,20 +20,16 @@ globalThis.WEBTORRENT_ANNOUNCE = createTorrent.announceList.map(function (arr)
 	return url.indexOf("wss://") === 0 || url.indexOf("ws://") === 0;
 });
 
-const getClient = thunky(function (cb)
-{
-	const client = new WebTorrent({
-		tracker: {
-			rtcConfig: {
-				...SimplePeer.config
-			}
+const client = new WebTorrent({
+	tracker: {
+		rtcConfig: {
+			...SimplePeer.config
 		}
-	});
-	window.client = client; // for easier debugging
-	client.on("warning", util.warning);
-	client.on("error", util.error);
-	cb(null, client);
+	}
 });
+
+client.on("warning", util.warning);
+client.on("error", util.error);
 
 init();
 
@@ -44,10 +39,6 @@ function init()
 	{
 		util.error("This browser is unsupported. Please use a browser with WebRTC support.");
 	}
-
-	// For performance, create the client immediately
-	getClient(function ()
-	{});
 
 	// Seed via upload input element
 	const upload = document.querySelector("input[name=upload]");
@@ -111,34 +102,20 @@ function isNotTorrentFile(file)
 function downloadTorrent(torrentId)
 {
 	util.log("Downloading torrent from " + torrentId);
-	getClient(function (err, client)
-	{
-		if (err) return util.error(err);
-		client.add(torrentId, onTorrent);
-	});
+	client.add(torrentId, onTorrent);
 }
 
 function downloadTorrentFile(file)
 {
 	util.unsafeLog("Downloading torrent from <strong>" + escapeHtml(file.name) + "</strong>");
-	getClient(function (err, client)
-	{
-		if (err) return util.error(err);
-		client.add(file, onTorrent);
-	});
+	client.add(file, onTorrent);
 }
 
 function seed(files)
 {
 	if (files.length === 0) return;
 	util.log("Seeding " + files.length + " files");
-
-	// Seed from WebTorrent
-	getClient(function (err, client)
-	{
-		if (err) return util.error(err);
-		client.seed(files, onTorrent);
-	});
+	client.seed(files, onTorrent);
 }
 
 function onTorrent(torrent)
@@ -185,8 +162,8 @@ function onTorrent(torrent)
 		util.updateSpeed(
 			"<b>Peers:</b> " + torrent.numPeers + " " +
 			"<b>Progress:</b> " + progress + "% " +
-			"<b>Download speed:</b> " + prettierBytes(window.client.downloadSpeed) + "/s " +
-			"<b>Upload speed:</b> " + prettierBytes(window.client.uploadSpeed) + "/s " +
+			"<b>Download speed:</b> " + prettierBytes(client.downloadSpeed) + "/s " +
+			"<b>Upload speed:</b> " + prettierBytes(client.uploadSpeed) + "/s " +
 			"<b>ETA:</b> " + remaining
 		);
 	}
@@ -249,19 +226,18 @@ function onTorrent(torrent)
 						// generate the zip relative to the torrent folder
 						zip = zip.folder(torrent.name);
 					}
-					zip.generateAsync({ type: "blob" })
-						.then(function (blob)
+					zip.generateAsync({ type: "blob" }).then(function (blob)
+					{
+						const url = URL.createObjectURL(blob);
+						const a = document.createElement("a");
+						a.download = zipFilename;
+						a.href = url;
+						a.click();
+						setTimeout(function ()
 						{
-							const url = URL.createObjectURL(blob);
-							const a = document.createElement("a");
-							a.download = zipFilename;
-							a.href = url;
-							a.click();
-							setTimeout(function ()
-							{
-								URL.revokeObjectURL(url);
-							}, 30 * 1000);
-						}, util.error);
+							URL.revokeObjectURL(url);
+						}, 30 * 1000);
+					}, util.error);
 				}
 			});
 		});

@@ -122,7 +122,8 @@ input[name=torrentId]
 {
 	grid-row: 1;
 	grid-column: 1;
-	border-radius: 24px;
+	border-radius: 50%;
+	overflow: hidden;
 }
 
 .profileIconImage
